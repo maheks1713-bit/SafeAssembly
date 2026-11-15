@@ -1,0 +1,12 @@
+{
+  "assignments": [
+    {
+      "callsign": "Medic-2",
+      "instruction": "Stage. Move immediately to Stage to assist with medical request. Report on arrival."
+    }
+  ],
+  "reason": "Medic-2 was selected as the nearest available medical responder to address the urgent situation at Stage.",
+  "escalate_reason": "Medical help was requested at Stage and severity level 3 indicates potential need for advanced emergency medical care, so 911 should be considered.",
+  "announcement_en": "",
+  "announcement_fr": ""
+}

@@ -1,0 +1,156 @@
+{
+  "permit_fields": [
+    {
+      "label": "Organizer",
+      "value": "[YOUR GROUP NAME]"
+    },
+    {
+      "label": "Contact",
+      "value": "[CONTACT NAME] · [PHONE]"
+    },
+    {
+      "label": "Location",
+      "value": "Grand Parade, Barrington St side"
+    },
+    {
+      "label": "Date and time",
+      "value": "Sat 6–8 PM (set-up 5:15 PM, clear by 8:30 PM)"
+    },
+    {
+      "label": "Expected attendance",
+      "value": "~800 people"
+    },
+    {
+      "label": "Activity",
+      "value": "Candlelight vigil, 3 short speeches, no march"
+    },
+    {
+      "label": "Structures",
+      "value": "One warming tent at the stage end; no stage build"
+    },
+    {
+      "label": "Sound",
+      "value": "One battery speaker, off by 8 PM"
+    },
+    {
+      "label": "Open flames",
+      "value": "Candles (to confirm with HRM; LED candles as backup)"
+    },
+    {
+      "label": "Safety plan",
+      "value": "6 marshals, 2 medics, 1 legal observer; warming tent at stage"
+    },
+    {
+      "label": "Road impact",
+      "value": "None requested; sidewalks kept clear"
+    },
+    {
+      "label": "Clean-up",
+      "value": "Volunteers sweep for wax and litter by 8:30 PM"
+    }
+  ],
+  "permit_markdown": "## Public gathering application (draft)\n\n- **Organizer:** [YOUR GROUP NAME]\n- **Location:** Grand Parade, Barrington St side\n- **When:** Sat 6–8 PM\n- **Attendance:** ~800 people\n- **Activity:** Candlelight vigil, 3 short speeches, no march\n- **Sound:** One battery speaker, off by 8 PM\n- **Safety plan:** 6 marshals, 2 medics, 1 legal observer; warming tent at stage\n\n### Questions for the city\n1. Are open flames (candles) allowed on the square?\n2. Is a noise permit needed for one speaker?",
+  "checklist": [
+    {
+      "item": "Recruit 6 marshals with callsigns M1–M6",
+      "owner": "Marshal lead",
+      "due": "1 week before",
+      "done": true
+    },
+    {
+      "item": "Recruit 2 medics with first-aid kits",
+      "owner": "Medic lead",
+      "due": "1 week before",
+      "done": true
+    },
+    {
+      "item": "Recruit a legal observer",
+      "owner": "Organizer",
+      "due": "1 week before",
+      "done": true
+    },
+    {
+      "item": "Submit the HRM application",
+      "owner": "Organizer",
+      "due": "1 week before",
+      "done": true
+    },
+    {
+      "item": "Confirm candle rules with HRM",
+      "owner": "Organizer",
+      "due": "3 days before",
+      "done": false
+    },
+    {
+      "item": "Confirm whether a noise permit is needed",
+      "owner": "Sound",
+      "due": "3 days before",
+      "done": false
+    },
+    {
+      "item": "Brief marshals on zones and exit plan",
+      "owner": "Marshal lead",
+      "due": "Day before",
+      "done": true
+    },
+    {
+      "item": "Post official update account in event description",
+      "owner": "Organizer",
+      "due": "Day before",
+      "done": true
+    },
+    {
+      "item": "Charge speaker and backup battery",
+      "owner": "Sound",
+      "due": "Day before",
+      "done": true
+    },
+    {
+      "item": "Pack warming tent, blankets, hand warmers",
+      "owner": "Medic lead",
+      "due": "Day before",
+      "done": true
+    },
+    {
+      "item": "Check weather forecast and wind",
+      "owner": "Organizer",
+      "due": "Day of",
+      "done": true
+    },
+    {
+      "item": "Set up warming tent at stage before start",
+      "owner": "Medic lead",
+      "due": "On site",
+      "done": true
+    },
+    {
+      "item": "Walk the Barrington St exit; keep lane clear",
+      "owner": "Marshal lead",
+      "due": "On site",
+      "done": true
+    },
+    {
+      "item": "Radio / group-chat check with all volunteers",
+      "owner": "Marshal lead",
+      "due": "On site",
+      "done": true
+    },
+    {
+      "item": "Sound off by 8 PM",
+      "owner": "Sound",
+      "due": "On site",
+      "done": true
+    },
+    {
+      "item": "Clean-up sweep for wax and litter",
+      "owner": "Organizer",
+      "due": "After",
+      "done": true
+    }
+  ],
+  "route_notes": "No march: people gather on Grand Parade and leave the same way. The Barrington St side is the only east exit and becomes a choke point when the crowd leaves at once; keep a marshal there and a clear lane. Use the George St side as a second exit if attendance passes 600. Disperse in waves after the last speech and remind people that buses on Barrington may be detoured.",
+  "questions_for_city": [
+    "Are open flames (candles) allowed on the square?",
+    "Is a noise permit needed for one speaker?"
+  ]
+}

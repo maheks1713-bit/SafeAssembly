@@ -1,0 +1,20 @@
+{
+  "assignments": [
+    {
+      "callsign": "M2",
+      "instruction": "Barrington Exit: exit blocked. Move now and redirect people to Main Square."
+    },
+    {
+      "callsign": "M5",
+      "instruction": "Barrington Exit: exit blocked. Move now, keep people back from the blockage."
+    },
+    {
+      "callsign": "M4",
+      "instruction": "Barrington Exit: hold position. Stop people entering the blocked exit. M2 and M5 joining you."
+    }
+  ],
+  "reason": "M2 and M5 were the nearest free marshals. M4 stays at the exit.",
+  "escalate_reason": "The only east exit is blocked with a crowd present. Consider calling 911 if it can't be cleared fast.",
+  "announcement_en": "",
+  "announcement_fr": ""
+}
