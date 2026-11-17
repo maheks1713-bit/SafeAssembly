@@ -23,6 +23,8 @@ export default function RootLayout() {
         <Stack.Screen name="injector" options={{ contentStyle: { backgroundColor: C.night }, animation: "slide_from_bottom" }} />
         <Stack.Screen name="organizer" />
         <Stack.Screen name="marshal" />
+        <Stack.Screen name="participant" />
+        <Stack.Screen name="report" />
       </Stack>
     </>
   );

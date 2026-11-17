@@ -2,18 +2,18 @@
   "assignments": [
     {
       "callsign": "M2",
-      "instruction": "Barrington Exit, move to zone immediately and assist crowd flow."
+      "instruction": "Barrington Exit. Move to zone immediately, assist crowd flow and relieve pressure."
     },
     {
       "callsign": "M5",
-      "instruction": "Barrington Exit, move to zone immediately and relieve congestion."
+      "instruction": "Barrington Exit. Move to zone immediately, assist crowd flow and relieve pressure."
     },
     {
       "callsign": "M4",
-      "instruction": "Barrington Exit, hold position, guide people away from the pinch point. M2 and M5 are joining you."
+      "instruction": "Barrington Exit. Hold position, guide people away from the pinch point. M2 and M5 are joining you."
     }
   ],
-  "reason": "M2 and M5 were the nearest free marshals to reinforce Barrington Exit where M4 is holding the line.",
+  "reason": "M2 and M5 were chosen as the nearest free marshals to reinforce Barrington Exit, while M4 holds the line.",
   "escalate_reason": "",
   "announcement_en": "",
   "announcement_fr": ""

@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
+import { File, Paths } from "expo-file-system";
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const md = (s: string) => esc(s).replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br/>");
@@ -19,9 +20,21 @@ export function pdfHtml(title: string, subtitle: string, sections: [string, stri
 }
 export const pdf = { esc, md };
 
-export async function sharePdf(html: string) {
+/**
+ * Render HTML to a PDF and open the share sheet.
+ * expo-print saves into a cache folder that Expo Go won't let expo-sharing read
+ * ("Not allowed to read file under given URL"), so we take the PDF as base64 and
+ * write our own copy into the app's cache directory, which sharing can read.
+ */
+export async function sharePdf(html: string, name = "SafeAssembly") {
   if (Platform.OS === "web") return Print.printAsync({ html });
-  const { uri } = await Print.printToFileAsync({ html });
-  if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(uri, { mimeType: "application/pdf", UTI: "com.adobe.pdf" });
-  else await Print.printAsync({ uri });
+  const { base64 } = await Print.printToFileAsync({ html, base64: true });
+  if (!base64) throw new Error("Couldn't create the PDF.");
+  const file = new File(Paths.cache, `${name.replace(/[^\w-]+/g, "-")}.pdf`);
+  await file.write(base64, { encoding: "base64" });
+  if (await Sharing.isAvailableAsync()) {
+    await Sharing.shareAsync(file.uri, { mimeType: "application/pdf", UTI: "com.adobe.pdf", dialogTitle: name });
+  } else {
+    await Print.printAsync({ uri: file.uri });
+  }
 }

@@ -1,9 +1,10 @@
 // Stylised Grand Parade map: 3 tappable zones coloured OK / Busy / Critical, plus volunteer pins.
 // (Plan's map fallback: no react-native-maps, matches the UI design, works in Expo Go everywhere.)
-import { Alert as RNAlert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { C, F } from "@/lib/theme";
 import { zoneStatus, joinList, type ZoneStatus } from "@/lib/format";
 import type { Alert, ReportRow, Volunteer, Zone } from "@/lib/types";
+import { info } from "@/lib/confirm";
 
 const STATUS: Record<ZoneStatus, { fill: string; border: string; text: string }> = {
   OK: { fill: "rgba(30,122,70,0.16)", border: C.ok, text: C.ok },
@@ -11,12 +12,19 @@ const STATUS: Record<ZoneStatus, { fill: string; border: string; text: string }>
   Critical: { fill: "rgba(180,35,24,0.20)", border: C.critical, text: C.white },
 };
 const PIN = 34;
+const PUBLIC_TIP: Record<ZoneStatus, string> = {
+  OK: "Plenty of room here.",
+  Busy: "Getting crowded. Give people space and follow the marshals.",
+  Critical: "Very crowded. Please move away from this area calmly and follow the marshals.",
+};
 
-export function ZoneMap({ zones, volunteers, alerts, reports, highlight }: {
+export function ZoneMap({ zones, volunteers, alerts, reports, highlight, publicView = false }: {
   zones: Zone[]; volunteers: Volunteer[]; alerts: Alert[]; reports: ReportRow[]; highlight?: string;
+  /** Participants: crowd colours only. No volunteer pins, so the public never sees where marshals stand. */
+  publicView?: boolean;
 }) {
   const ordered = [...zones].sort((a, b) => (a.id === "barrington_exit" ? 1 : b.id === "barrington_exit" ? -1 : 0));
-  const pins = volunteers.filter((v) => v.role !== "legal_observer" && v.zone_id);
+  const pins = publicView ? [] : volunteers.filter((v) => v.role !== "legal_observer" && v.zone_id);
 
   return (
     <View style={styles.card}>
@@ -41,7 +49,8 @@ export function ZoneMap({ zones, volunteers, alerts, reports, highlight }: {
               key={z.id}
               accessibilityRole="button"
               accessibilityLabel={`${z.name}, ${st}`}
-              onPress={() => RNAlert.alert(`${z.name} · ${st}`, here.length ? `Volunteers here: ${joinList(here)}` : "No volunteers here right now.")}
+              onPress={() => info(`${z.name} · ${st}`, publicView ? PUBLIC_TIP[st]
+                : here.length ? `Volunteers here: ${joinList(here)}` : "No volunteers here right now.")}
               style={[styles.zone, {
                 left: `${box.x}%`, top: `${box.y}%`, width: `${box.w}%`, height: `${box.h}%`,
                 backgroundColor: s.fill, borderColor: s.border, borderWidth: highlight === z.id ? 3 : 2,
@@ -88,10 +97,12 @@ export function ZoneMap({ zones, volunteers, alerts, reports, highlight }: {
           </View>
         ))}
         <View style={{ flex: 1 }} />
-        <View style={styles.legendItem}>
-          <View style={[styles.sq, { backgroundColor: C.teal, borderRadius: 7 }]} />
-          <Text style={styles.legendText}>Moving</Text>
-        </View>
+        {!publicView && (
+          <View style={styles.legendItem}>
+            <View style={[styles.sq, { backgroundColor: C.teal, borderRadius: 7 }]} />
+            <Text style={styles.legendText}>Moving</Text>
+          </View>
+        )}
       </View>
     </View>
   );

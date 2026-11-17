@@ -53,6 +53,16 @@ export default function RolePicker() {
           <Feather name="chevron-right" size={24} color={C.white} />
         </Pressable>
 
+        <Pressable style={({ pressed }) => [styles.role, styles.roleSecondary, pressed && { opacity: 0.85 }]} accessibilityRole="button"
+          onPress={() => router.push("/participant/event")}>
+          <Feather name="users" size={28} color={C.white} />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.roleTitle}>{"I'm a participant"}</Text>
+            <Text style={styles.roleSub}>Event info, updates and how to help</Text>
+          </View>
+          <Feather name="chevron-right" size={24} color={C.white} />
+        </Pressable>
+
         <View style={{ flex: 1, minHeight: 40 }} />
 
         <View style={styles.privacyRow}>

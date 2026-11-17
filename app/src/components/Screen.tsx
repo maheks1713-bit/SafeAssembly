@@ -4,8 +4,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { C, S, T } from "@/lib/theme";
 import { refetchAll } from "@/lib/store";
 
-export function Screen({ eyebrow, title, right, children, footer, scroll = true, eyebrowNode }: {
+export function Screen({ eyebrow, title, right, children, footer, scroll = true, eyebrowNode, bottomInset = false }: {
   eyebrow?: string; eyebrowNode?: ReactNode; title?: string; right?: ReactNode; children: ReactNode; footer?: ReactNode; scroll?: boolean;
+  /** Screens outside a tab bar (e.g. the report) pad for the phone's bottom bar themselves. */
+  bottomInset?: boolean;
 }) {
   const header = (title || eyebrow || eyebrowNode) && (
     <View style={styles.header}>
@@ -17,7 +19,7 @@ export function Screen({ eyebrow, title, right, children, footer, scroll = true,
     </View>
   );
   return (
-    <SafeAreaView style={styles.root} edges={["top", "left", "right"]}>
+    <SafeAreaView style={styles.root} edges={bottomInset ? ["top", "left", "right", "bottom"] : ["top", "left", "right"]}>
       {scroll ? (
         <ScrollView
           contentContainerStyle={styles.content}

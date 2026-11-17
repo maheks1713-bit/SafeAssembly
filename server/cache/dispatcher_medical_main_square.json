@@ -1,0 +1,12 @@
+{
+  "assignments": [
+    {
+      "callsign": "Medic-2",
+      "instruction": "Main Square. Respond immediately to medical request."
+    }
+  ],
+  "reason": "Medic-2 was selected as the nearest available medical responder to address the urgent situation in Main Square.",
+  "escalate_reason": "Medical assistance has been requested in Main Square and immediate professional intervention may be required.",
+  "announcement_en": "",
+  "announcement_fr": ""
+}

@@ -27,8 +27,6 @@ export default function OrganizerTabs() {
         }}
       />
       <Tabs.Screen name="plan" options={{ title: "Plan", tabBarIcon: ({ color }) => <Feather name="clipboard" size={23} color={color as string} /> }} />
-      <Tabs.Screen name="rights" options={{ title: "Rights", tabBarIcon: ({ color }) => <MaterialCommunityIcons name="scale-balance" size={24} color={color as string} /> }} />
-      <Tabs.Screen name="report" options={{ href: null }} />
-    </Tabs>
+      <Tabs.Screen name="rights" options={{ title: "Rights", tabBarIcon: ({ color }) => <MaterialCommunityIcons name="scale-balance" size={24} color={color as string} /> }} />    </Tabs>
   );
 }

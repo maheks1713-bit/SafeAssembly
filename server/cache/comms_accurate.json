@@ -1,8 +1,8 @@
 {
   "about_event": true,
-  "claim": "Halifax Climate Vigil is ON tonight at Grand Parade, 6-8 PM, and people should dress warm.",
+  "claim": "Halifax Climate Vigil is ON tonight at Grand Parade, 6-8 PM, and dress warm.",
   "verdict": "accurate",
   "harm": "none",
-  "correction_en": "Confirmed: The Halifax Climate Vigil is ON tonight at Grand Parade from 6-8 PM. Check [YOUR ACCOUNT] for updates.",
-  "correction_fr": "Confirmé : La Veillée pour le climat d'Halifax a lieu ce soir à Grand Parade de 18h à 20h. Consultez [YOUR ACCOUNT] pour les mises à jour."
+  "correction_en": "Confirmed: The Halifax Climate Vigil is ON tonight from 6-8 PM at Grand Parade. Check [YOUR ACCOUNT] for updates.",
+  "correction_fr": "Confirmé : La Veillée climatique d'Halifax a lieu ce soir de 18h à 20h à Grand Parade. Consultez [YOUR ACCOUNT] pour les mises à jour."
 }

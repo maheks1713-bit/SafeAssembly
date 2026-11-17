@@ -1,6 +1,6 @@
 // Screen 4: Approvals inbox. Nothing goes public, and no 911 call is placed, without a person tapping.
 import { useState } from "react";
-import { Alert as RNAlert, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Screen } from "@/components/Screen";
 import { AgentIcon } from "@/components/AgentIcon";
@@ -10,6 +10,7 @@ import { useTable } from "@/lib/store";
 import { approveDraft, rejectDraft } from "@/lib/api";
 import { ago, clock, RISK_LABEL, ZONE_NAME, useNow } from "@/lib/format";
 import type { Draft } from "@/lib/types";
+import { confirm } from "@/lib/confirm";
 
 export default function Approvals() {
   const now = useNow();
@@ -72,10 +73,10 @@ function EscalationCard({ draft, now }: { draft: Draft; now: number }) {
   const zone = draft.meta?.zone ? ZONE_NAME[draft.meta.zone] : "";
 
   // DEMO SAFETY: this never dials. In production it would open the dialer with 911 ready; a human presses call.
-  const confirmCall = () => RNAlert.alert(
+  const confirmCall = () => confirm(
     "Call 911?",
     "Demo build: this logs your decision and does not dial.\n\nIn production, the phone dialer opens with 911 ready and you press call.",
-    [{ text: "Cancel", style: "cancel" }, { text: "Log: call 911", style: "destructive", onPress: () => run("approve") }],
+    "Log: call 911", () => run("approve"), true,
   );
 
   return (

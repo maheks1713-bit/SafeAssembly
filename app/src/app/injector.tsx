@@ -1,7 +1,7 @@
 // Scenario Injector (DEMO OPERATOR ONLY). Opened by long-pressing the logo on the role picker.
 // Each button calls one server route; the server inserts the row and runs /tick so the other phones change live.
 import { useCallback, useEffect, useState } from "react";
-import { Alert as RNAlert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
@@ -10,6 +10,7 @@ import { C, F, S } from "@/lib/theme";
 import { health, inject, injectPaste, resetDemo, type InjectKind } from "@/lib/api";
 import { API_URL, USE_MOCKS } from "@/lib/config";
 import type { Health } from "@/lib/types";
+import { confirm } from "@/lib/confirm";
 
 const time = (iso: string) => new Date(iso).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" });
 
@@ -85,10 +86,8 @@ export default function Injector() {
         {log && <Text style={[styles.status, { marginTop: 16, color: log.startsWith("✓") ? "#A6E3C4" : "#F5B5AC" }]}>{log}</Text>}
 
         <Pressable disabled={!!busy} accessibilityRole="button" style={({ pressed }) => [styles.reset, pressed && { opacity: 0.7 }]}
-          onPress={() => RNAlert.alert("Reset demo?", "Deletes all reports, alerts, drafts and agent logs, and re-seeds the event.", [
-            { text: "Cancel", style: "cancel" },
-            { text: "Reset", style: "destructive", onPress: () => run("reset", "Reset demo", resetDemo) },
-          ])}>
+          onPress={() => confirm("Reset demo?", "Deletes all reports, alerts, drafts and agent logs, and re-seeds the event.",
+            "Reset", () => run("reset", "Reset demo", resetDemo), true)}>
           <Text style={styles.resetText}>{busy === "reset" ? "Resetting..." : "Reset demo"}</Text>
         </Pressable>
         <Text style={[styles.status, { textAlign: "center", marginTop: 10 }]}>Open: long-press the logo on the role picker</Text>

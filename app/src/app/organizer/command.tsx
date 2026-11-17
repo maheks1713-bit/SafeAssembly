@@ -77,7 +77,7 @@ export default function Command() {
       </View>
 
       <Button title={ended ? "View event report" : "End event and generate report"} variant="secondary" icon="file-text"
-        style={{ marginTop: 28 }} onPress={() => router.push("/organizer/report")} />
+        style={{ marginTop: 28 }} onPress={() => router.push("/report")} />
       <Button title="Switch role" variant="ghost" icon="log-out" style={{ marginTop: 10 }} onPress={() => router.replace("/")} />
     </Screen>
   );

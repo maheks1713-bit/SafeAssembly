@@ -1,6 +1,8 @@
 // Screen 8: Event report (Report Agent). Opened from Command -> "End event and generate report".
+// Lives on the root Stack, not in the organizer tabs: Expo Router redirects hidden tabs (href: null)
+// back to the first tab, which made the button look like it only refreshed Command.
 import { useState } from "react";
-import { Alert as RNAlert, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { Screen } from "@/components/Screen";
@@ -12,6 +14,7 @@ import { generateReport } from "@/lib/api";
 import { clock } from "@/lib/format";
 import { pdf, pdfHtml, sharePdf } from "@/lib/pdf";
 import type { EventReport } from "@/lib/types";
+import { confirm } from "@/lib/confirm";
 
 export default function Report() {
   const event = useTable("events")[0];
@@ -26,9 +29,7 @@ export default function Report() {
     setBusy(true); setErr(null);
     try { setReport(await generateReport()); } catch (e) { setErr((e as Error).message); } finally { setBusy(false); }
   }
-  const confirmEnd = () => RNAlert.alert("End the event?", "The Report Agent will write the incident report from the agent log.", [
-    { text: "Cancel", style: "cancel" }, { text: "End event", onPress: run },
-  ]);
+  const confirmEnd = () => confirm("End the event?", "The Report Agent will write the incident report from the agent log.", "End event", run);
 
   async function share() {
     if (!report) return;
@@ -42,7 +43,7 @@ export default function Report() {
           ["Lessons for next time", `<ul>${report.lessons.map((l) => `<li>${pdf.esc(l)}</li>`).join("")}</ul>`],
         ],
         report.privacy,
-      ));
+      ), "SafeAssembly-event-report");
     } catch (e) { setErr((e as Error).message); }
   }
 
@@ -54,8 +55,9 @@ export default function Report() {
   );
 
   return (
-    <Screen eyebrowNode={eyebrow} title="Event report"
-      right={<Button title="Back" variant="ghost" icon="arrow-left" onPress={() => router.navigate("/organizer/command")} />}
+    <Screen eyebrowNode={eyebrow} title="Event report" bottomInset
+      right={<Button title="Back" variant="ghost" icon="arrow-left"
+        onPress={() => (router.canGoBack() ? router.back() : router.replace("/organizer/command"))} />}
       footer={report && !busy ? (
         <>
           <Button title="Export PDF" variant="secondary" style={{ flex: 1 }} onPress={share} />

@@ -4,7 +4,8 @@ import { API_URL, EVENT_ID, USE_MOCKS } from "./config";
 import { sb } from "./supabase";
 import { mockInsert, mockUpdate, refetchAll } from "./store";
 import { MOCK_PLAN, mockHealth, mockReport, mockRights } from "./mocks";
-import type { Draft, EventReport, Health, Plan, ReportType, RightsAnswer, ZoneId } from "./types";
+import type { Cause, Contact, Draft, EmailDraft, EventReport, Health, Plan, ReportType, RightsAnswer, ZoneId } from "./types";
+import { ANGLES, TONES, composeEmail, isUsed, markUsed, pick } from "./cause";
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -79,6 +80,34 @@ export async function askRights(question: string, lang: "en" | "fr"): Promise<Ri
 export async function generateReport(): Promise<EventReport> {
   if (USE_MOCKS) { await wait(1800); return mockReport(); }
   return call<EventReport>("/report", {}, 60_000);
+}
+
+// ---- Participant ----
+
+/**
+ * Draft a polite email to one public office. Gemini writes it (random angle + tone, told to avoid
+ * this phone's earlier drafts); if the server is unreachable, rate-limited or out of quota, the phone
+ * writes one itself. Either way the result is checked against every draft this phone has produced,
+ * so a participant never gets the same email twice. Nothing is sent: the person sends it themselves.
+ */
+export async function draftEmail(cause: Cause, contact: Contact, ev: { name: string; place: string; time: string }, previous: EmailDraft[]): Promise<EmailDraft> {
+  const angle = pick(ANGLES);
+  let draft: EmailDraft | null = null;
+  if (!USE_MOCKS && API_URL) {
+    try {
+      const r = await call<{ subject: string; body: string }>("/participant/email", {
+        to: { title: contact.title, office: contact.office, salutation: contact.salutation },
+        event: ev, about: cause.about, ask: cause.ask, angle, tone: pick(TONES),
+        avoid: previous.slice(-5).map((p) => p.body.slice(0, 300)),
+      }, 25_000);
+      if (r.subject && r.body && !(await isUsed(r))) draft = { subject: r.subject, body: r.body, source: "gemini" };
+    } catch (e) {
+      console.warn("[email] writing on the phone instead:", (e as Error).message);
+    }
+  }
+  draft ??= await composeEmail(cause, contact, ev, angle);
+  await markUsed(draft);
+  return draft;
 }
 
 // ---- Scenario Injector ----

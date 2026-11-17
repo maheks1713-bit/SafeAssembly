@@ -43,6 +43,8 @@ export const ReportOut = z.object({
   lessons: z.array(z.string()),
 });
 
+export const EmailOut = z.object({ subject: z.string(), body: z.string() });
+
 export const RISK_LABEL: Record<string, string> = {
   choke_point: "Choke point",
   overcrowding: "Overcrowding",

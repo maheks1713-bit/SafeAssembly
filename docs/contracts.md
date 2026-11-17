@@ -13,6 +13,7 @@ Three additions to the plan's schema: `assignments.kind` (`move` | `hold`), `dra
 | `POST /plan` | `{ place?, when?, size?, sound?, route?, activity?, name? }` | Plan (below); also stored in `events.facts_json.plan` |
 | `POST /plan/submitted` | | Plan with `submitted: true` |
 | `POST /rights` | `{ question, lang: "en" \| "fr" }` | Rights answer (below) |
+| `POST /participant/email` | `{ to: {title, office, salutation}, event: {name, place, time}, about, ask, angle, tone, avoid[] }` | `{ subject, body, source, ms }`. Never cached, never logged; max 6 per phone per 10 min (429 → app writes the draft on the phone) |
 | `POST /report` | | Report (below); sets `events.status = 'ended'` |
 | `POST /drafts/:id/approve` | `{ body_en?, body_fr? }` (organizer edits) | Draft row |
 | `POST /drafts/:id/reject` | | Draft row |

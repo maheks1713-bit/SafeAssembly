@@ -7,7 +7,9 @@ export type AgentName = "Planner" | "Rights" | "Monitor" | "Dispatcher" | "Comms
 export type EventRow = {
   id: string; name: string; location: string; start_time: string; expected_size: number; status: string;
   facts_json: { time?: string; place?: string; status?: string; official_updates?: string; expected_size?: string;
-    amplified_sound?: string; route?: string; activity?: string; plan?: Plan; report?: EventReport } | null;
+    amplified_sound?: string; route?: string; activity?: string; warming_tent?: string; plan?: Plan; report?: EventReport;
+    /** Participant-facing "why" and "how to help". Optional: the app has a built-in default (lib/cause.ts). */
+    cause?: Cause } | null;
 };
 export type Zone = {
   id: ZoneId; event_id: string; name: string; capacity_level: number; has_exit: boolean;
@@ -49,6 +51,20 @@ export type Tables = {
   alerts: Alert; assignments: Assignment; drafts: Draft; agent_log: AgentLog;
 };
 export type TableName = keyof Tables;
+
+// ---- Participant role ----
+/** A public office participants can contact. Phone/email are the office's public channels, never a person's private ones. */
+export type Contact = {
+  id: string; title: string; office: string; salutation: string;
+  phone?: string; email?: string; lookup_url?: string; lookup_label?: string;
+};
+export type Cause = {
+  about: string; why: string[]; ask: string;
+  /** false = this event only needs people to show up; the Help tab says so instead of listing officials. */
+  action_needed: boolean;
+  contacts: Contact[];
+};
+export type EmailDraft = { subject: string; body: string; source: "gemini" | "phone" };
 
 // ---- Agent route responses (see docs/contracts.md) ----
 export type Plan = {

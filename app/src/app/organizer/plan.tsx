@@ -66,7 +66,7 @@ export default function PlanScreen() {
           ["Route notes", `<p>${pdf.md(plan.route_notes)}</p>`],
         ],
         plan.disclaimer,
-      ));
+      ), "SafeAssembly-permit-draft");
     } catch (e) { setErr((e as Error).message); } finally { setBusy(null); }
   }
 
