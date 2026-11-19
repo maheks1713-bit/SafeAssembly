@@ -1,12 +1,12 @@
 {
   "assignments": [
     {
-      "callsign": "Medic-1",
-      "instruction": "Stage: Report immediately to the warming tent at Stage for cold stress support."
+      "callsign": "Medic-2",
+      "instruction": "Stage. Proceed immediately to the warming tent at Stage."
     }
   ],
-  "reason": "The medic was sent to the warming tent at Stage to handle cold wind stress.",
+  "reason": "Medic-2 was dispatched to the warming tent at Stage because of the cold wind stress alert.",
   "escalate_reason": "",
-  "announcement_en": "Cold wind alert. Please visit the warming tent at Stage to warm up and stay safe.",
-  "announcement_fr": "Alerte de vent froid. Veuillez visiter la tente chauffee de la Scene."
+  "announcement_en": "Stay safe from the cold! A warming tent is now open at the Stage area. Please visit if you need to warm up.",
+  "announcement_fr": "Restez au chaud! Une tentes chauffe-eau est ouverte a la Scene. Venez vous rechauffer."
 }

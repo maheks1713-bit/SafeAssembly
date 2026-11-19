@@ -1,0 +1,20 @@
+{
+  "assignments": [
+    {
+      "callsign": "M2",
+      "instruction": "Stage: Move to zone immediately to assist with crowd control."
+    },
+    {
+      "callsign": "M3",
+      "instruction": "Stage: Hold position, guide people away from the pinch point. M2 is joining you."
+    },
+    {
+      "callsign": "M6",
+      "instruction": "Stage: Hold position, guide people away from the pinch point. M2 is joining you."
+    }
+  ],
+  "reason": "M2 was selected as the nearest free marshal, while M3 and M6 already hold the line in the affected zone.",
+  "escalate_reason": "",
+  "announcement_en": "",
+  "announcement_fr": ""
+}

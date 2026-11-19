@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { monitorRules, pickVolunteers, holders, needs911, type Volunteer, type Zone } from "./rules";
+import { monitorRules, pickVolunteers, holders, needs911, targetZone, dedupe, NEED, ADJ, type Volunteer, type Zone } from "./rules";
 
 const zones: Zone[] = [
   { id: "stage", name: "Stage", has_exit: false },
@@ -82,4 +82,70 @@ test("911 escalation only for severity 3 medical or blocked exit", () => {
   assert.equal(needs911({ zone_id: "stage", risk_type: "medical", severity: 3 }), true);
   assert.equal(needs911({ zone_id: "barrington_exit", risk_type: "blocked_exit", severity: 3 }), true);
   assert.equal(needs911({ zone_id: "barrington_exit", risk_type: "choke_point", severity: 3 }), false);
+});
+
+// ---- Edge cases ----
+
+test("reports for unknown zones and non-alerting report types are ignored", () => {
+  assert.equal(monitorRules([r("parking_lot", "crowd", 5), r("stage", "note")], zones, null, [], []).length, 0);
+});
+
+test("a crowd report with no level never raises an alert", () => {
+  assert.equal(monitorRules([r("barrington_exit", "crowd", null)], zones, null, [], []).length, 0);
+});
+
+test("weather boundaries: exactly -10 °C and exactly 50 km/h are not alerts; 30 °C is not heat stress", () => {
+  assert.equal(monitorRules([], zones, { apparent_temperature: -10, wind_speed_10m: 50, created_at: T }, [], []).length, 0);
+  assert.equal(monitorRules([], zones, { apparent_temperature: 30, wind_speed_10m: 0, created_at: T }, [], []).length, 0);
+});
+
+test("weather alerts are event-wide and handled at the warming tent at Stage", () => {
+  const [a] = monitorRules([], zones, { apparent_temperature: -20, wind_speed_10m: 0, created_at: T }, [], []);
+  assert.equal(a.zone_id, "all");
+  assert.equal(targetZone(a), "stage");
+  assert.equal(targetZone({ zone_id: "main_square", risk_type: "x", severity: 1 }), "main_square");
+});
+
+test("dedupe keeps different risks in the same zone, and the same risk in different zones", () => {
+  const raw = [
+    { zone_id: "stage", risk_type: "medical", severity: 3 as const, facts: "", since: T },
+    { zone_id: "stage", risk_type: "overcrowding", severity: 2 as const, facts: "", since: T },
+    { zone_id: "main_square", risk_type: "medical", severity: 3 as const, facts: "", since: T },
+  ];
+  assert.equal(dedupe(raw, []).length, 3);
+});
+
+test("every alert type that needs people has a staffing rule; dispersal risk needs none", () => {
+  for (const k of ["choke_point", "overcrowding", "medical", "blocked_exit", "cold_wind_stress", "heat_stress"]) assert.ok(NEED[k], k);
+  assert.equal(NEED.dispersal_risk, undefined);
+  assert.deepEqual(pickVolunteers(vols, { zone_id: "barrington_exit", risk_type: "dispersal_risk", severity: 1 }), []);
+});
+
+test("zone adjacency is symmetric", () => {
+  for (const [z, ns] of Object.entries(ADJ)) for (const n of ns) assert.ok(ADJ[n].includes(z), `${z} <-> ${n}`);
+});
+
+test("legal observers and busy volunteers are never dispatched", () => {
+  const withLegal: Volunteer[] = [...vols, { id: "9", callsign: "Legal-1", role: "legal_observer", zone_id: "stage", status: "free" }];
+  for (const risk of Object.keys(NEED)) {
+    const sent = pickVolunteers(withLegal, { zone_id: "stage", risk_type: risk, severity: 3 });
+    assert.ok(!sent.some((v) => v.role === "legal_observer"), risk);
+  }
+  const allBusy = vols.map((v) => ({ ...v, status: "busy" }));
+  assert.deepEqual(pickVolunteers(allBusy, { zone_id: "stage", risk_type: "medical", severity: 3 }), []);
+});
+
+test("ties in distance are broken by callsign, so dispatch is deterministic", () => {
+  const sent = pickVolunteers(vols, { zone_id: "stage", risk_type: "blocked_exit", severity: 3 }).map((v) => v.callsign);
+  assert.deepEqual(sent, ["M1", "M2"], "Stage marshals hold; nearest are Main Square's, alphabetically");
+});
+
+test("holders apply only to crowd and exit risks", () => {
+  assert.deepEqual(holders(vols, { zone_id: "stage", risk_type: "medical", severity: 3 }), []);
+  assert.deepEqual(holders(vols, { zone_id: "stage", risk_type: "overcrowding", severity: 2 }).map((v) => v.callsign), ["M3", "M6"]);
+});
+
+test("911 is never suggested below severity 3, even for medical", () => {
+  assert.equal(needs911({ zone_id: "stage", risk_type: "medical", severity: 2 }), false);
+  assert.equal(needs911({ zone_id: "all", risk_type: "cold_wind_stress", severity: 3 }), false);
 });

@@ -6,7 +6,7 @@
     "start": "tsx src/index.ts",
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test src/*.test.ts",
+    "test": "tsx --test \"src/**/*.test.ts\"",
     "seed": "tsx scripts/seed.ts",
     "ping-gemini": "tsx scripts/ping-gemini.ts",
     "test-contracts": "tsx scripts/test-contracts.ts"

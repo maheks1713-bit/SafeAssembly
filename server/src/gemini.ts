@@ -4,8 +4,23 @@ import fs from "node:fs";
 import path from "node:path";
 import { CACHE_DIR, PROMPTS_DIR, env, geminiEnabled } from "./env";
 
-const ai = env.geminiKey ? new GoogleGenAI({ apiKey: env.geminiKey }) : null;
+type GenAiClient = Pick<GoogleGenAI, "models">;
+let ai: GenAiClient | null = env.geminiKey ? new GoogleGenAI({ apiKey: env.geminiKey }) : null;
 const MODELS = { fast: env.modelFast, smart: env.modelSmart };
+
+let writeCache = true;
+
+/**
+ * Tests only: swap in a fake Gemini client (or null for cache-only). Fake answers are not written
+ * to cache/ (the committed demo fallbacks) unless a test asks for it.
+ */
+export function setGeminiClientForTests(
+  client: { models: { generateContent: (req: any) => Promise<{ text?: string }> } } | null,
+  opts: { writeCache?: boolean } = {},
+) {
+  ai = client as GenAiClient | null;
+  writeCache = client === null || (opts.writeCache ?? false);
+}
 
 fs.mkdirSync(CACHE_DIR, { recursive: true });
 
@@ -71,7 +86,7 @@ export async function callAgent<T>(o: {
           o.timeoutMs ?? 8000,
         );
         const out = o.schema.parse(JSON.parse(res.text ?? ""));
-        if (o.cacheKey) fs.writeFileSync(cachePath(o.cacheKey), JSON.stringify(out, null, 2));
+        if (o.cacheKey && writeCache) fs.writeFileSync(cachePath(o.cacheKey), JSON.stringify(out, null, 2));
         return { out, source: "gemini", ms: Date.now() - started };
       } catch (e) {
         console.warn(`[${o.agent}] attempt ${attempt} failed:`, (e as Error).message);
